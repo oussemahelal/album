@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,13 +19,14 @@ import com.example.albums.presentation.adapter.AlbumAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var animation: LottieAnimationView
+    private lateinit var exitButton: AppCompatButton
 
     private lateinit var viewModel: HomeViewModel
 
@@ -43,32 +45,37 @@ class HomeFragment : Fragment() {
         (activity?.application as BaseApplication).mainComponent().inject(this)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         viewModel = injectViewModel(providerFactory)
+
         initViews(root)
 
+        viewModel.getFromDatabase()
         viewModel.getAlbums()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val model = appDatabase.appDao().getAll()
-
-            withContext(Dispatchers.Main) {
-                if (model.any()) {
-                    updateUi(model.map { m -> m.title })
-                }
-            }
+        exitButton.setOnClickListener {
+            exitProcess(0)
         }
 
-        viewModel.albumsResult.observe(viewLifecycleOwner) {
-            if (it.albums.isNotEmpty()) {
+        handleAlbumResult()
 
+        return root
+    }
+
+    /**
+     * Handle data observer && update Ui
+     */
+    private fun handleAlbumResult() {
+        viewModel.albumsResult.observe(viewLifecycleOwner) {
+
+            if (it.albums.isNotEmpty()) {
                 updateUi(it.albums.map { m -> m.title ?: "" })
                 CoroutineScope(Dispatchers.IO).launch {
+
                     val data: ArrayList<DataModel> = arrayListOf()
                     it.albums.forEach { m -> data.add(DataModel(m)) }
                     appDatabase.appDao().createAll(data)
                 }
             }
         }
-        return root
     }
 
     /**
@@ -81,7 +88,7 @@ class HomeFragment : Fragment() {
     }
 
     /**
-     * Init adapter
+     * Initialize adapter
      */
     private fun initRecycler(data: List<String>) {
         albumAdapter = AlbumAdapter(requireContext(), data)
@@ -90,8 +97,12 @@ class HomeFragment : Fragment() {
 
     }
 
+    /**
+     * Initialize views
+     */
     private fun initViews(root: View) {
         recyclerView = root.findViewById(R.id.home_fragment_recycler_view)
+        exitButton = root.findViewById(R.id.home_fragment_exit_btn)
         animation = root.findViewById(R.id.home_fragment_animation)
         animation.playAnimation()
         animation.visibility = View.VISIBLE
