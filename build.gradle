@@ -5,7 +5,7 @@ buildscript {
     ext.retrofit_version = '2.9.0'
     ext.dagger_version = '2.42'
     ext.coroutines_version = "1.6.4"
-    ext.room_version = "1.1.1"
+    ext.room_version = "2.4.3"
     ext.jackson_version = "2.13.3"
 }
 

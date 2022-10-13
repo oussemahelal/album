@@ -1,6 +1,7 @@
 package com.example.albums.main.adapter
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -28,9 +29,12 @@ class AlbumAdapter internal constructor(context: Context?, data: List<String>) :
     }
 
     // binds the data to the TextView in each row
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listTitles[position]
-        holder.albumTitle.text = item
+        holder.albumTitle.text = item.replaceFirstChar { m -> m.uppercase() }
+        holder.positionView.text = (position + 1).toString().plus(".")
+
     }
 
     // total number of rows
@@ -39,16 +43,14 @@ class AlbumAdapter internal constructor(context: Context?, data: List<String>) :
     }
 
     // stores and recycles views as they are scrolled off screen
-    inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder internal constructor(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
         var albumTitle: TextView
+        var positionView: TextView
 
         init {
             albumTitle = itemView.findViewById(R.id.album_adapter_title_text)
+            positionView = itemView.findViewById(R.id.album_adapter_position)
         }
-    }
-
-    // convenience method for getting data at click position
-    fun getItem(id: Int): String {
-        return listTitles[id]
     }
 }

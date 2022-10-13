@@ -3,22 +3,32 @@ package com.example.albums.room.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.data.api.model.AlbumResponseModel
 
-@Entity(tableName = "data_response")
-class DataModel {
+@Entity(tableName = "data_response_table")
+data class DataModel(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    private val id : Int? = null
+    var id: Int = 0,
 
     @ColumnInfo(name = "albumId")
-    private val albumId : Int? = null
+    var albumId: Int = 0,
 
     @ColumnInfo(name = "title")
-    private val title : String? = null
+    var title: String = "",
 
     @ColumnInfo(name = "url")
-    private val url : String? = null
+    var url: String = "",
 
     @ColumnInfo(name = "thumbnailUrl")
-    private val thumbnailUrl : String? = null
+    var thumbnailUrl: String = ""
+) {
+
+    constructor(model: AlbumResponseModel) : this() {
+        id = model.id
+        albumId = model.albumId
+        title = model.title ?: ""
+        url = model.url ?: ""
+        thumbnailUrl = model.thumbnailUrl ?: ""
+    }
 }

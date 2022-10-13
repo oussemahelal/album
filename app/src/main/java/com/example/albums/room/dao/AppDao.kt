@@ -6,12 +6,16 @@ import com.example.albums.room.model.DataModel
 
 @Dao
 interface AppDao {
-    @Query("Select * from data_response")
-    suspend fun getListTitles(): List<DataModel>
 
-    @Update
-    suspend fun updateListTitles(list: List<String>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertModel(vararg model: DataModel)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertListTitles(list: List<String>)
+    @Query("SELECT * FROM data_response_table WHERE id = :id")
+    suspend fun getModelById(id: Int): DataModel
+
+    @Transaction
+    suspend fun createAll(objects: List<DataModel>) = objects.forEach {insertModel(it)}
+
+    @Query("SELECT * FROM data_response_table")
+    suspend fun getAll(): Array<DataModel>
 }

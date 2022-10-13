@@ -14,6 +14,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.albums.R
 import com.example.albums.di.extension.injectViewModel
 import com.example.albums.main.adapter.AlbumAdapter
+import com.example.albums.room.db.AppDatabase
+import com.example.albums.room.model.DataModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -24,6 +30,9 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var albumAdapter: AlbumAdapter
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     @Inject
     lateinit var providerFactory: ViewModelProvider.Factory
@@ -39,16 +48,35 @@ class HomeFragment : Fragment() {
 
         viewModel.getAlbums()
 
+        CoroutineScope(Dispatchers.IO).launch {
+            val model = appDatabase.appDao().getAll()
+            withContext(Dispatchers.Main) {
+                if (model.any()) {
+                    initRecycler(model.map { m -> m.title })
+                    animation.cancelAnimation()
+                    animation.visibility = View.GONE
+                }
+            }
+        }
+
         viewModel.albumsResult.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 initRecycler(it.map { m -> m.title ?: "" })
                 animation.cancelAnimation()
                 animation.visibility = View.GONE
+                CoroutineScope(Dispatchers.IO).launch {
+                    val data: ArrayList<DataModel> = arrayListOf()
+                    it.forEach { m -> data.add(DataModel(m)) }
+                    appDatabase.appDao().createAll(data)
+                }
             }
         }
         return root
     }
 
+    /**
+     * Init adapter
+     */
     private fun initRecycler(data: List<String>) {
         albumAdapter = AlbumAdapter(requireContext(), data)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -60,8 +88,8 @@ class HomeFragment : Fragment() {
         screenTitle = root.findViewById(R.id.home_fragment_title_screen)
         recyclerView = root.findViewById(R.id.home_fragment_recycler_view)
         animation = root.findViewById(R.id.home_fragment_animation)
-        animation.visibility = View.VISIBLE
         animation.playAnimation()
+        animation.visibility = View.VISIBLE
     }
 
 }

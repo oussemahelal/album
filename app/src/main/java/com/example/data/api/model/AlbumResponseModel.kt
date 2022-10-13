@@ -11,14 +11,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
 data class AlbumResponseModel(
 
     @JsonProperty("id")
-    val id : Int? = null,
+    var id : Int = 0,
     @JsonProperty("albumId")
-    val albumId : Int? = null,
+    var albumId : Int = 0,
     @JsonProperty("title")
-    val title : String? = null,
+    var title : String? = null,
     @JsonProperty("url")
-    val url : String? = null,
+    var url : String? = null,
     @JsonProperty("thumbnailUrl")
-    val thumbnailUrl : String? = null,
+    var thumbnailUrl : String? = null,
 
 )
