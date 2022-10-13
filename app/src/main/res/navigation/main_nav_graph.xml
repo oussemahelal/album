@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.albums.main.fragment.HomeFragment"
+        android:name="com.example.albums.presentation.fragment.HomeFragment"
         android:label="home"
         tools:layout="@layout/fragment_home" />
 </navigation>

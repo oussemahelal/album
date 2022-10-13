@@ -5,19 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".main.fragment.HomeFragment">
-
-    <TextView
-        android:id="@+id/home_fragment_title_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="20dp"
-        android:text="@string/screen_title"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    tools:context=".presentation.fragment.HomeFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/home_fragment_animation"
@@ -39,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/album_title_item"
-        app:layout_constraintTop_toBottomOf="@+id/home_fragment_title_screen"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
