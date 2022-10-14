@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
 import com.example.albums.BaseApplication
 import com.example.albums.R
 import com.example.albums.data.room.db.AppDatabase
@@ -25,7 +25,7 @@ import kotlin.system.exitProcess
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var animation: LottieAnimationView
+    private lateinit var progressBar: ProgressBar
     private lateinit var exitButton: AppCompatButton
 
     private lateinit var viewModel: HomeViewModel
@@ -68,8 +68,8 @@ class HomeFragment : Fragment() {
 
             if (it.albums.isNotEmpty()) {
                 updateUi(it.albums.map { m -> m.title ?: "" })
-                CoroutineScope(Dispatchers.IO).launch {
 
+                CoroutineScope(Dispatchers.IO).launch {
                     val data: ArrayList<DataModel> = arrayListOf()
                     it.albums.forEach { m -> data.add(DataModel(m)) }
                     appDatabase.appDao().createAll(data)
@@ -83,8 +83,7 @@ class HomeFragment : Fragment() {
      */
     private fun updateUi(list: List<String>) {
         initRecycler(list)
-        animation.cancelAnimation()
-        animation.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     /**
@@ -103,9 +102,8 @@ class HomeFragment : Fragment() {
     private fun initViews(root: View) {
         recyclerView = root.findViewById(R.id.home_fragment_recycler_view)
         exitButton = root.findViewById(R.id.home_fragment_exit_btn)
-        animation = root.findViewById(R.id.home_fragment_animation)
-        animation.playAnimation()
-        animation.visibility = View.VISIBLE
+        progressBar = root.findViewById(R.id.home_fragment_progress_bar)
+        progressBar.visibility = View.VISIBLE
     }
 
 }

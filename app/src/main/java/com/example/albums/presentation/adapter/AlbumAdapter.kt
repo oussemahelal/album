@@ -13,7 +13,8 @@ import com.example.albums.R
 
 class AlbumAdapter internal constructor(context: Context?, data: List<String>) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
-    private val listTitles: List<String>
+
+    private var listTitles: List<String>
     private val inflater: LayoutInflater
 
     // data is passed into the constructor
@@ -22,29 +23,7 @@ class AlbumAdapter internal constructor(context: Context?, data: List<String>) :
         listTitles = data
     }
 
-    // inflates the row layout from xml when needed
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = inflater.inflate(R.layout.album_title_item, parent, false)
-        return ViewHolder(view)
-    }
-
-    // binds the data to the TextView in each row
-    @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = listTitles[position]
-        holder.albumTitle.text = item.replaceFirstChar { m -> m.uppercase() }
-        holder.positionView.text = (position + 1).toString().plus(".")
-
-    }
-
-    // total number of rows
-    override fun getItemCount(): Int {
-        return listTitles.size
-    }
-
-    // stores and recycles views as they are scrolled off screen
-    inner class ViewHolder internal constructor(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var albumTitle: TextView
         var positionView: TextView
 
@@ -52,5 +31,21 @@ class AlbumAdapter internal constructor(context: Context?, data: List<String>) :
             albumTitle = itemView.findViewById(R.id.album_adapter_title_text)
             positionView = itemView.findViewById(R.id.album_adapter_position)
         }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view: View = inflater.inflate(R.layout.album_title_item, parent, false)
+        return ViewHolder(view)
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = listTitles[position]
+        holder.albumTitle.text = item.replaceFirstChar { m -> m.uppercase() }
+        holder.positionView.text = (position + 1).toString().plus(".")
+    }
+
+    override fun getItemCount(): Int {
+        return listTitles.size
     }
 }
