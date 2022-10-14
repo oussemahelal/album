@@ -29,6 +29,7 @@ constructor(
             when (result) {
                 is Resource.Success -> {
                     albumsResult.postValue(AlbumsListState(albums = result.data ?: emptyList()))
+
                     if (result.data != null && result.data.any()) {
                         val data: ArrayList<DataModel> = arrayListOf()
                         result.data.forEach { m -> data.add(DataModel(m)) }
