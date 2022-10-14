@@ -2,8 +2,8 @@ package com.example.albums.di.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.albums.di.main.factories.MainViewModelProviderFactory
 import com.example.albums.di.main.extension.CommonViewModelKey
+import com.example.albums.di.main.factories.MainViewModelProviderFactory
 import com.example.albums.presentation.fragment.HomeViewModel
 import dagger.Binds
 import dagger.Module

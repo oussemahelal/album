@@ -14,7 +14,7 @@ interface AppDao {
     suspend fun getModelById(id: Int): DataModel
 
     @Transaction
-    suspend fun createAll(objects: List<DataModel>) = objects.forEach {insertModel(it)}
+    suspend fun createAll(objects: List<DataModel>) = objects.forEach { insertModel(it) }
 
     @Query("SELECT * FROM data_response_table")
     suspend fun getAll(): Array<DataModel>

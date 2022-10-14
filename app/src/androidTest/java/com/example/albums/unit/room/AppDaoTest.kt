@@ -1,4 +1,4 @@
-package com.example.albums.room
+package com.example.albums.unit.room
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -32,13 +32,14 @@ class AppDaoTest {
 
         appDao = dataBase.appDao()
 
-        list = listOf(DataModel(
-            id = 1,
-            albumId = 1,
-            title = "test_1",
-            url = "www.url.com",
-            thumbnailUrl = "www.url.com"
-        ),
+        list = listOf(
+            DataModel(
+                id = 1,
+                albumId = 1,
+                title = "test_1",
+                url = "www.url.com",
+                thumbnailUrl = "www.url.com"
+            ),
             DataModel(
                 id = 2,
                 albumId = 2,
@@ -52,7 +53,8 @@ class AppDaoTest {
                 title = "test_3",
                 url = "www.url.com",
                 thumbnailUrl = "www.url.com"
-            ))
+            )
+        )
     }
 
     /**

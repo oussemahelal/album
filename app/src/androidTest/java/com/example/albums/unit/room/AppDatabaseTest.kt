@@ -1,4 +1,4 @@
-package com.example.albums.room
+package com.example.albums.unit.room
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -22,7 +22,6 @@ class AppDatabaseTest {
 
     @Before
     fun setUpDatabase() {
-        // make the room in memory to delete the dataBase after test
         dataBase = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java

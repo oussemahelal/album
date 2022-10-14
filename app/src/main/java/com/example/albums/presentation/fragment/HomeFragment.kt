@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.albums.BaseApplication
 import com.example.albums.R
+import com.example.albums.data.api.model.AlbumResponseModel
 import com.example.albums.data.room.db.AppDatabase
 import com.example.albums.data.room.model.DataModel
 import com.example.albums.di.main.extension.injectViewModel
@@ -20,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.system.exitProcess
 
 class HomeFragment : Fragment() {
 
@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
         viewModel.getAlbums()
 
         exitButton.setOnClickListener {
-            exitProcess(0)
+            activity?.finish()
         }
 
         handleAlbumResult()
@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
         viewModel.albumsResult.observe(viewLifecycleOwner) {
 
             if (it.albums.isNotEmpty()) {
-                updateUi(it.albums.map { m -> m.title ?: "" })
+                updateUi(it.albums)
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val data: ArrayList<DataModel> = arrayListOf()
@@ -81,7 +81,7 @@ class HomeFragment : Fragment() {
     /**
      * Update ui && display data
      */
-    private fun updateUi(list: List<String>) {
+    private fun updateUi(list: List<AlbumResponseModel>) {
         initRecycler(list)
         progressBar.visibility = View.GONE
     }
@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
     /**
      * Initialize adapter
      */
-    private fun initRecycler(data: List<String>) {
+    private fun initRecycler(data: List<AlbumResponseModel>) {
         albumAdapter = AlbumAdapter(requireContext(), data)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = albumAdapter

@@ -1,35 +1,36 @@
 package com.example.albums.presentation.adapter
 
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.albums.R
+import com.example.albums.data.api.model.AlbumResponseModel
+import com.squareup.picasso.Picasso
 
 
-class AlbumAdapter internal constructor(context: Context?, data: List<String>) :
+class AlbumAdapter internal constructor(context: Context?, data: List<AlbumResponseModel>) :
     RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
-    private var listTitles: List<String>
+    private var listAlbums: List<AlbumResponseModel>
     private val inflater: LayoutInflater
 
-    // data is passed into the constructor
     init {
         inflater = LayoutInflater.from(context)
-        listTitles = data
+        listAlbums = data
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var albumTitle: TextView
-        var positionView: TextView
+        var imageView: ImageView
 
         init {
             albumTitle = itemView.findViewById(R.id.album_adapter_title_text)
-            positionView = itemView.findViewById(R.id.album_adapter_position)
+            imageView = itemView.findViewById(R.id.album_adapter_image_view)
         }
     }
 
@@ -38,14 +39,24 @@ class AlbumAdapter internal constructor(context: Context?, data: List<String>) :
         return ViewHolder(view)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = listTitles[position]
-        holder.albumTitle.text = item.replaceFirstChar { m -> m.uppercase() }
-        holder.positionView.text = (position + 1).toString().plus(".")
+        val item = listAlbums[position]
+
+        if (!item.thumbnailUrl.isNullOrEmpty()) {
+            Picasso.get()
+                .load(item.thumbnailUrl)
+                .error(R.drawable.ic_launcher_background)
+                .into(holder.imageView)
+        } else {
+            Picasso.get()
+                .load(R.drawable.ic_launcher_background)
+                .into(holder.imageView)
+        }
+
+        holder.albumTitle.text = item.title?.replaceFirstChar { m -> m.uppercase() }
     }
 
     override fun getItemCount(): Int {
-        return listTitles.size
+        return listAlbums.size
     }
 }

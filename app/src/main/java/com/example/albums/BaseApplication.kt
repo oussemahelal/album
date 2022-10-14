@@ -5,9 +5,9 @@ import com.example.albums.di.application.AppComponent
 import com.example.albums.di.application.DaggerAppComponent
 import com.example.albums.di.main.MainComponent
 
-class BaseApplication: Application() {
+class BaseApplication : Application() {
 
-    lateinit var appComponent: AppComponent
+    private lateinit var appComponent: AppComponent
     private var mainComponent: MainComponent? = null
 
     override fun onCreate() {

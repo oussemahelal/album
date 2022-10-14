@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="image_width">30dp</dimen>
+    <dimen name="image_height">30dp</dimen>
+    <dimen name="corner_radius">7dp</dimen>
+    <dimen name="title_horizontal_margin">10dp</dimen>
+    <dimen name="card_view_horizontal_margin">5dp</dimen>
+    <dimen name="width_view">0dp</dimen>
+    <dimen name="view_height">1.1dp</dimen>
+    <dimen name="vertical_margin">15dp</dimen>
+</resources>
